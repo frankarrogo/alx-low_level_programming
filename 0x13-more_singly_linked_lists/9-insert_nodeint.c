@@ -4,41 +4,48 @@
 #include "lists.h"
 
 /**
-  * delete_nodeint_at_index - ...
+  * insert_nodeint_at_index - ...
   * @head: ...
-  * @index: ...
+  * @idx: ...
+  * @n: ...
   *
   * Return: ...
   */
-int delete_nodeint_at_index(listint_t **head, unsigned int index)
+listint_t *insert_nodeint_at_index(listint_t **head, unsigned int idx, int n)
 {
+	listint_t *new_node, *iter;
 	unsigned int count = 1;
-	listint_t *new = *head, *temp;
 
-	if (!head || !*head)
-		return (-1);
-
-	if (index == 0)
+	if (head)
 	{
-		*head = new->next;
-		free(new);
-		return (1);
-	}
+		new_node = malloc(sizeof(listint_t));
+		if (new_node == NULL)
+			return (NULL);
 
-	temp = *head;
-	while (temp)
-	{
-		if (count == index)
+		new_node->n = n;
+		if (idx > 0)
 		{
-			new = temp->next;
-			temp->next = new->next;
-			free(new);
-			return (1);
+			iter = *head;
+			while (iter)
+			{
+				if (count == idx)
+				{
+					new_node->next = iter->next;
+					iter->next = new_node;
+					return (new_node);
+				}
+				iter = iter->next;
+				count++;
+			}
+			if (idx > count)
+				return (NULL);
 		}
-
-		temp = temp->next;
-		count++;
+		else
+		{
+			new_node->next = *head;
+			*head = new_node;
+		}
+		return (new_node);
 	}
-
-	return (-1);
+	return (NULL);
 }
